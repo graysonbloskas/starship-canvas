@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
-console.log(canvas.width, canvas.height);
+
 
 // Player Class
 class Player {
@@ -105,7 +105,20 @@ function spawnEnemies() {
 let animationId;
 function animate() {
   animationId = requestAnimationFrame(animate);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Setting background space image
+//   var background = new Image();
+//   background.src = "https://i.redd.it/imkv74m4q5g41.png";
+//   background.onload = function() {
+//       var pattern = ctx.createPattern(background, 'repeat') 
+//       ctx.fillStyle = pattern
+//       ctx.fillRect(0, 0, canvas.width, canvas.height);
+//     }
+    
+    // Black background with cool faded animation of objects
+ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'
+ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+
   player.draw();
   projectiles.forEach((projectile, index) => {
     projectile.update();

@@ -5,7 +5,7 @@ Checkout the LIVE SITE and play for yourself!
 ## About Starship Canvas
 Starship Canvas is just a simple game made with Canvas and Javascript in which the user's objective is to destroy as many enemies before one of them reaches the user!
 It's pretty easy to create; check out the documentation to learn what I did. 
-[Documentation] (https://github.com/graysonbloskas/starship-canvas.git)
+[Documentation](https://github.com/graysonbloskas/starship-canvas.git)
 
 
 ## Game Start

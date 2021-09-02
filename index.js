@@ -5,6 +5,9 @@ const ctx = canvas.getContext('2d');
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
+// User score Element
+const scoreEl = document.querySelector('#scoreEl');
+console.log(scoreEl);
 // Player Class
 class Player {
   constructor(x, y, radius, color) {
@@ -69,7 +72,7 @@ class Enemy {
 }
 
 // adding friction to particles to slow down particle speed and distnace after impact
-const friction = 0.99
+const friction = 0.99;
 // Particle class
 class Particle {
   constructor(x, y, radius, color, velocity) {
@@ -82,12 +85,12 @@ class Particle {
   }
   draw() {
     ctx.save();
-    ctx.globalAlpha = this.alpha
+    ctx.globalAlpha = this.alpha;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     ctx.fillStyle = this.color;
     ctx.fill();
-    ctx.restore()
+    ctx.restore();
   }
 
   update() {
@@ -96,7 +99,7 @@ class Particle {
     this.velocity.y *= friction;
     this.x = this.x + this.velocity.x;
     this.y = this.y + this.velocity.y;
-    this.alpha -= 0.01
+    this.alpha -= 0.01;
   }
 }
 
@@ -136,6 +139,7 @@ function spawnEnemies() {
 }
 
 let animationId;
+let score = 0;
 function animate() {
   animationId = requestAnimationFrame(animate);
   // Setting background space image
@@ -158,7 +162,6 @@ function animate() {
     } else {
       particle.update();
     }
-    
   });
   projectiles.forEach((projectile, index) => {
     projectile.update();
@@ -190,19 +193,27 @@ function animate() {
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
       // When projectiles touch enemy
       if (dist - enemy.radius - projectile.radius < 1) {
-
-
         // Particles - create explosions on collision with enemy
         for (let i = 0; i < enemy.radius * 2; i++) {
           particles.push(
-            new Particle(projectile.x, projectile.y, Math.random() * 2, enemy.color, {
-              x: (Math.random() - 0.5) * (Math.random() * 8),
-              y: (Math.random() - 0.5) * (Math.random() * 8),
-            })
+            new Particle(
+              projectile.x,
+              projectile.y,
+              Math.random() * 2,
+              enemy.color,
+              {
+                x: (Math.random() - 0.5) * (Math.random() * 8),
+                y: (Math.random() - 0.5) * (Math.random() * 8),
+              }
+            )
           );
         }
 
         if (enemy.radius - 10 > 7) {
+          // increase User Score
+          score += 100;
+          scoreEl.innerHTML = score;
+
           gsap.to(enemy, {
             radius: enemy.radius - 10,
           });
@@ -210,6 +221,11 @@ function animate() {
             projectiles.splice(projectileIndex, 1);
           }, 0);
         } else {
+          // remove from scene
+          // increase User Score
+          score += 250;
+          scoreEl.innerHTML = score;
+
           setTimeout(() => {
             enemies.splice(index, 1);
             projectiles.splice(projectileIndex, 1);
@@ -221,7 +237,6 @@ function animate() {
 }
 
 addEventListener('click', (event) => {
-  console.log(projectiles);
   const angle = Math.atan2(
     event.clientY - canvas.height / 2,
     event.clientX - canvas.width / 2

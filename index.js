@@ -7,6 +7,12 @@ canvas.height = innerHeight;
 
 // User score Element
 const scoreEl = document.querySelector('#scoreEl');
+
+// Button Element
+const startGameBtn = document.querySelector('#startGameBtn');
+const modalEl = document.querySelector('#modalEl');
+const endScoreEl = document.querySelector('#endScoreEl');
+
 console.log(scoreEl);
 // Player Class
 class Player {
@@ -106,10 +112,20 @@ class Particle {
 const x = canvas.width / 2;
 const y = canvas.height / 2;
 
-const player = new Player(x, y, 15, 'white');
-const projectiles = [];
-const enemies = [];
-const particles = [];
+let player = new Player(x, y, 15, 'white');
+let projectiles = [];
+let enemies = [];
+let particles = [];
+
+function init() {
+  player = new Player(x, y, 15, 'white');
+  projectiles = [];
+  enemies = [];
+  particles = [];
+  score = 0;
+  scoreEl.innerHTML = score;
+  endScoreEl.innerHTML = score;
+}
 
 function spawnEnemies() {
   setInterval(() => {
@@ -186,6 +202,8 @@ function animate() {
     if (dist - enemy.radius - player.radius < 1) {
       // end game
       cancelAnimationFrame(animationId);
+      modalEl.style.display = 'flex';
+      endScoreEl.innerHTML = score;
     }
 
     projectiles.forEach((projectile, projectileIndex) => {
@@ -250,5 +268,9 @@ addEventListener('click', (event) => {
   );
 });
 
-animate();
-spawnEnemies();
+startGameBtn.addEventListener('click', () => {
+  init()
+  animate();
+  spawnEnemies();
+  modalEl.style.display = 'none';
+});
